@@ -125,26 +125,7 @@ class Solution:
                 else: min_right = min(A[i], B[j])
 
                 return (max_left + min_right) / 2.0
-        
-        
-    def longestPalindrome(self, s):
-        set_c = []
-        Max = 0
-        count = 0
-        startIdx = 0
-        endIdx = 0
-        isIn = 0
-        for c in s:
-            if c in set_c:
-               length = count - set_c.index(c) + 1
-               if (length > Max):
-                   Max = length
-                   startIdx = set_c.index(c)
-                   endIdx = count
-            count += 1       
-            set_c.append(c)
-        return s[startIdx:endIdx + 1]
-    
+            
     def convert(self, s, numRows):
         total = []
         for i in range(numRows):
@@ -468,6 +449,61 @@ class Solution:
                                          traverse(mainTree.left, subTree) or
                                          traverse(mainTree.right, subTree))
         return traverse(mainTree, subTree)
+    
+    def partitionLabels(self, s):
+        # get the last index of each char
+        last = {c: i for i, c in enumerate(s)}
+        ans = []
+        anchor = j = 0
+        for i, c in enumerate(s):
+            j = max(j, last[c])
+            if i == j:
+                ans.append(i - anchor + 1)
+                anchor = i + 1
+                
+        return ans
+    
+    def longestPalindrome(self, s):
+        table = [[0 for i in range(len(s))]for j in range(len(s))]
+        ans = ""
+        for j in range(len(s) - 1, 0 - 1, -1):
+            for i in range(j, len(s)):
+                table[i][i] = True
+                table[i][j] = s[j] == s[i] and (i - j < 3 or table[i - 1][j + 1])
+                if table[i][j] and i - j + 1 > len(ans):
+                    ans = s[j:i+1]
+        
+        return ans
+    
+    def prisonAfterNDays(self, cells, N):
+        def getNextDay(cells):
+            return [int(i > 0 and i < (len(cells) - 1) and cells[i-1] == cells[i+1])
+                    for i in range(len(cells))]
+            
+        seen = {}
+        while N > 0:
+            c = tuple(cells)
+            if c in seen:
+                N = N % (seen[c] - N)
+            seen[c] = N
+            cells = getNextDay(cells)
+            if N >= 1:
+                N -= 1
+
+        return cells
+    
+    def maxProfit(self, prices):
+        min_price = max(prices)
+        max_diff = 0
+        min_index = len(prices) - 1
+        for i, price in enumerate(prices):
+            if price < min_price:
+                min_price = price
+                min_index = i
+            if i > min_index and price - min_price > max_diff:
+                max_diff = price - min_price
+            
+        return max_diff
             
 class MyQueue:
     def __init__(self):
