@@ -22,13 +22,7 @@ class Solution:
             tmpHead = tmpHead.next
         return head
 
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        
+    def addTwoNumbers(self, l1, l2):        
         curL1 = l1
         curL2 = l2
         carry = 0
@@ -59,10 +53,6 @@ class Solution:
         return totalNode[0]
     
     def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
         if len(s) == 1:
             return len(s)
         substring = []
@@ -86,11 +76,6 @@ class Solution:
         return Max
     
     def findMedianSortedArrays(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: float
-        """
         if len(nums1) >= len(nums2):
             B = nums1
             A = nums2
@@ -180,12 +165,7 @@ class Solution:
                 changeLeft = True
         return maximum
     
-    def letterCombinations(self, digits):
-        """
-        :type digits: str
-        :rtype: List[str]
-        """
-        
+    def letterCombinations(self, digits):      
         # You can use dictionary
         lst = list('abcdefghijklmnopqrstuvwxyz')
         seperateLst = []
@@ -304,15 +284,15 @@ class Solution:
         prev.next = l1 if l1 is not None else l2
         return prevHead.next
     
-    def _dfs(self, grid, r, c):
-        n_row = len(grid)
-        n_col = len(grid[r])
-
-        grid[r][c] = '0'
-        if r + 1 <= n_row and grid[r + 1][c] == '1': self._dfs(grid, r + 1, c)
-        if c + 1 <= n_col and grid[r][c + 1] == '1': self._dfs(grid, r, c + 1)
-
     def num_islands(self, grid):
+        def _dfs(self, grid, r, c):
+            n_row = len(grid)
+            n_col = len(grid[r])
+    
+            grid[r][c] = '0'
+            if r + 1 <= n_row and grid[r + 1][c] == '1': self._dfs(grid, r + 1, c)
+            if c + 1 <= n_col and grid[r][c + 1] == '1': self._dfs(grid, r, c + 1)
+        
         if len(grid) == 0:
             return 0
         n_islands = 0
