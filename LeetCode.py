@@ -22,7 +22,7 @@ class Solution:
             tmpHead = tmpHead.next
         return head
 
-    def addTwoNumbers(self, l1, l2):        
+    def addTwoNumbers(self, l1, l2):
         curL1 = l1
         curL2 = l2
         carry = 0
@@ -39,24 +39,24 @@ class Solution:
                 total = curL1.val + curL2.val + carry
                 curL1 = curL1.next
                 curL2 = curL2.next
-                                
+
             carry = total // 10
             newNode = ListNode(total % 10)
             totalNode.append(newNode)
             if count != 0:
                 totalNode[-2].next = totalNode[-1]
             count += 1
-            
+
         if (carry != 0):
             newNode = ListNode(carry)
             totalNode[-1].next = newNode
         return totalNode[0]
-    
+
     def lengthOfLongestSubstring(self, s):
         if len(s) == 1:
             return len(s)
         substring = []
-        Max = 0 
+        Max = 0
         for sub in s:
             print(sub)
             if sub in substring:
@@ -69,12 +69,12 @@ class Solution:
                 substring.append(sub)
             else:
                 substring.append(sub)
-        
+
         if len(substring) > Max:
             return len(substring)
-                
+
         return Max
-    
+
     def findMedianSortedArrays(self, nums1, nums2):
         if len(nums1) >= len(nums2):
             B = nums1
@@ -82,10 +82,10 @@ class Solution:
         else:
             A = nums1
             B = nums2
-        
+
         m = len(A)
         n = len(B)
-        
+
         imin, imax = 0, m
         while(imin <= imax):
             i = (imin + imax) // 2
@@ -101,7 +101,7 @@ class Solution:
                     max_left = A[i - 1]
                 else:
                     max_left = max(A[i - 1], B[j - 1])
-                    
+
                 if (m + n) % 2 == 1:
                    return max_left
 
@@ -110,17 +110,17 @@ class Solution:
                 else: min_right = min(A[i], B[j])
 
                 return (max_left + min_right) / 2.0
-            
+
     def convert(self, s, numRows):
         total = []
         for i in range(numRows):
             total.append([])
-        
+
         pointer = 0
         reachBottom = False
         total[0].append(s[0])
         for c in s[1:]:
-            if not reachBottom:    
+            if not reachBottom:
                 pointer += 1
                 total[pointer].append(c)
                 if pointer == numRows - 1:
@@ -133,20 +133,20 @@ class Solution:
         result = []
         for i in range(numRows):
             result = result + total[i]
-        
+
         result = ''.join(result)
         return result
-    
+
     def isMatch(self, s, p):
         if not p:
             return not s
         match = bool(s) and (p[0] == '.' or p[0] == s[0])
-        
+
         if len(p) >= 2 and p[1] == '*':
-            return self.isMatch(s, p[2:]) or match and self.isMatch(s[1:], p)    
+            return self.isMatch(s, p[2:]) or match and self.isMatch(s[1:], p)
         else:
             return match and self.isMatch(s[1:], p[1:])
-            
+
     def maxArea(self, height):
         maximum = 0
         start = 0
@@ -164,8 +164,8 @@ class Solution:
                 end -= 1
                 changeLeft = True
         return maximum
-    
-    def letterCombinations(self, digits):      
+
+    def letterCombinations(self, digits):
         # You can use dictionary
         lst = list('abcdefghijklmnopqrstuvwxyz')
         seperateLst = []
@@ -180,12 +180,12 @@ class Solution:
                 tempLst.append(lst[index])
                 index += 1
             seperateLst.append(tempLst)
-            
+
         dialLst = []
         for c in digits:
             digit = int(c)
             dialLst.append(seperateLst[digit - 2])
-            
+
         result = []
         index = 0
         def backtrack(combination, next_digit):
@@ -197,7 +197,7 @@ class Solution:
         if digits:
             backtrack("", digits)
         return result
-    
+
     def reverseKGroup(self, head, k):
         newhead = head
         index = 0
@@ -224,7 +224,7 @@ class Solution:
                 print('tmphead val: ' + str(lstNode[-1].val))
             index += 1
             newhead = newhead.next
-        
+
         return head
 
     def trap(self, height):
@@ -237,13 +237,13 @@ class Solution:
         rignt_max[-1] = height[-1]
         for i in range(1, len(height)):
             left_max[i] = max(left_max[i - 1], height[i])
-                
+
         for i in range(len(height) - 1, 1, -1):
             rignt_max[i - 1] = max(rignt_max[i], height[i - 1])
 
         for i in range(1, len(height)):
             area += min(left_max[i], rignt_max[i]) - height[i]
-            
+
         return area
 
     def _dfs(self, grid, r, c):
@@ -267,11 +267,11 @@ class Solution:
                     n_islands += 1
 
         return n_islands
-    
+
     def mergeTwoLists(self, l1, l2):
         prevHead = ListNode(-1)
         prev = prevHead
-        
+
         while l1 and l2:
             if l1.val <= l2.val:
                 prev.next = l1
@@ -280,19 +280,19 @@ class Solution:
                 prev.next = l2
                 l2 = l2.next
             prev = prev.next
-            
+
         prev.next = l1 if l1 is not None else l2
         return prevHead.next
-    
+
     def num_islands(self, grid):
         def _dfs(self, grid, r, c):
             n_row = len(grid)
             n_col = len(grid[r])
-    
+
             grid[r][c] = '0'
             if r + 1 <= n_row and grid[r + 1][c] == '1': self._dfs(grid, r + 1, c)
             if c + 1 <= n_col and grid[r][c + 1] == '1': self._dfs(grid, r, c + 1)
-        
+
         if len(grid) == 0:
             return 0
         n_islands = 0
@@ -308,7 +308,7 @@ class Solution:
     def zigzag_level_order(self, root):
         if not root:
             return []
-        
+
         answer = []
         self._helper(answer, root, 0, True)
         return answer
@@ -367,10 +367,10 @@ class Solution:
 
     def kClosest(self, points, k):
         dist = lambda i: points[i][0]**2 + points[i][1]**2
-        
+
         def sort(i, j, k):
             if i >= j: return
-            
+
             K = (i + j) // 2
             points[i], points[K] = points[K], points[i]
 
@@ -397,7 +397,7 @@ class Solution:
             return j
         sort(0, len(points) - 1, k)
         return points[:k]
-    
+
     def mostCommonWord(self, paragraph, banned):
         import re
         bag_words = re.findall(r'\w+', paragraph.lower())
@@ -414,7 +414,7 @@ class Solution:
                 max_freq = frequency[word]
                 answer = word
         return answer
-    
+
     def isSubtree(self, mainTree, subTree):
         def equal(mainTree, subTree):
             if mainTree is None and subTree is None:
@@ -425,11 +425,11 @@ class Solution:
                     equal(mainTree.left, subTree.left) and
                     equal(mainTree.right, subTree.right))
         def traverse(mainTree, subTree):
-            return mainTree != None and (equal(mainTree, subTree) or 
+            return mainTree != None and (equal(mainTree, subTree) or
                                          traverse(mainTree.left, subTree) or
                                          traverse(mainTree.right, subTree))
         return traverse(mainTree, subTree)
-    
+
     def partitionLabels(self, s):
         # get the last index of each char
         last = {c: i for i, c in enumerate(s)}
@@ -440,9 +440,9 @@ class Solution:
             if i == j:
                 ans.append(i - anchor + 1)
                 anchor = i + 1
-                
+
         return ans
-    
+
     def longestPalindrome(self, s):
         table = [[0 for i in range(len(s))]for j in range(len(s))]
         ans = ""
@@ -452,14 +452,14 @@ class Solution:
                 table[i][j] = s[j] == s[i] and (i - j < 3 or table[i - 1][j + 1])
                 if table[i][j] and i - j + 1 > len(ans):
                     ans = s[j:i+1]
-        
+
         return ans
-    
+
     def prisonAfterNDays(self, cells, N):
         def getNextDay(cells):
             return [int(i > 0 and i < (len(cells) - 1) and cells[i-1] == cells[i+1])
                     for i in range(len(cells))]
-            
+
         seen = {}
         while N > 0:
             c = tuple(cells)
@@ -471,7 +471,7 @@ class Solution:
                 N -= 1
 
         return cells
-    
+
     def maxProfit(self, prices):
         min_price = max(prices)
         max_diff = 0
@@ -482,56 +482,56 @@ class Solution:
                 min_index = i
             if i > min_index and price - min_price > max_diff:
                 max_diff = price - min_price
-            
+
         return max_diff
-    
+
     def hasPath(self, maze, start, destination):
         visited = [[False for i in range(len(maze[0]))]for j in range(len(maze))]
-        def dfs(maze, start, destination, visited): 
+        def dfs(maze, start, destination, visited):
             if visited[start[0]][start[1]]:
                 return False
             if start == destination:
                 return True
             visited[start[0]][start[1]] = True
             r, l, u, d = start[1] + 1, start[1] - 1, start[0] - 1, start[0] + 1
-            
+
             while(r < len(maze[0]) and maze[start[0]][r] == 0): # right
                 r += 1
             if dfs(maze, [start[0], r - 1], destination, visited):
                 return True
-            
+
             while(l >= 0 and maze[start[0]][l] == 0):    # left
                 l -=1
             if dfs(maze, [start[0], l + 1], destination, visited):
                 return True
-            
+
             while(d < len(maze) and maze[d][start[1]] == 0):
                 d += 1
             if dfs(maze, [d - 1, start[1]], destination, visited):
                 return True
-            
+
             while(u >= 0 and maze[u][start[1]] == 0):
                 u -= 1
             if dfs(maze, [u + 1, start[1]], destination, visited):
                 return True
-            
-            
+
+
             return False
-        
+
         return dfs(maze, start, destination, visited)
-    
+
     def ladderLength(self, beginWord, endWord, wordList):
         from collections import defaultdict
         if endWord not in wordList or not beginWord or not endWord or not wordList:
             return 0
-        
+
         all_combo_dict = defaultdict(list)
         L = len(beginWord)
         # Prepare a look a table for the word list
         for word in wordList:
             for i in range(L):
                 all_combo_dict[word[:i] + '*' + word[i+1:]].append(word)
-                
+
         queue = [(beginWord, 1)]
         visited = [beginWord]
         while queue:
@@ -541,12 +541,70 @@ class Solution:
                 for next_state in all_combo_dict[intermediates]:
                     if next_state == endWord:
                         return level + 1
-                    
+
                     if next_state not in visited:
                         queue.append((next_state, level + 1))
                         visited.append(next_state)
         return 0
-            
+
+    def diameterOfBinaryTree(self, root):
+        self.length = 1
+        def depth(root):
+            if not root: return 0
+            L = depth(root.left)
+            R = depth(root.right)
+            self.length = max(self.length, L + R + 1)
+            return max(L, R) + 1
+
+        depth(root)
+        return self.length - 1
+
+    def copyRandomList(self, head):
+        if not head: return None
+
+        # Insert a identity node without it's random pointer
+        tmp = head
+        while tmp:
+            newNode = RandomListNode(tmp.label, None, None)
+            newNode.next = tmp.next
+            tmp.next = newNode
+            tmp = tmp.next.next
+
+        tmp = head
+        # Move the random pointer to new Node
+        while tmp:
+            if tmp.random:
+                tmp.next.random = tmp.random.next
+            tmp = tmp.next.next
+
+        # Seperate old list from new list
+        newHead = head.next
+        pold = head
+        pnew = newHead
+        while pnew.next:
+            pold.next = pnew.next
+            pold = pold.next
+            pnew.next = pold.next
+            pnew = pnew.next
+
+        return newHead
+
+    def floodFill(self, image, sr, sc, newColor):
+        color = image[sr][sc]
+        n_row = len(image)
+        n_col = len(image[0])
+        if image[sr][sc] == newColor: return image
+        def dfs(r, c):
+            if image[r][c] == color:
+                image[r][c] = newColor
+                if r > 0: dfs(r - 1, c)   # Moving up
+                if r < n_row - 1: dfs(r + 1, c)   # Moving down
+                if c > 0: dfs(r, c - 1)   # Moving left
+                if c < n_col - 1: dfs(r, c + 1)   # Moving right
+        dfs(sr, sc)
+        return image
+
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
@@ -568,8 +626,8 @@ class MyQueue:
         if len(self.s1) == 0:
             return True
         else: return False
-    
-    
+
+
 class DLinkedNode():
     def __init__(self):
         self.key = 0
@@ -641,56 +699,14 @@ class LRUCache:
                 tail = self._remove_tail()
                 del self.cache[tail.key]
                 self.size -= 1
-                
-    def diameterOfBinaryTree(self, root):
-        self.length = 1
-        def depth(root):
-            if not root: return 0
-            L = depth(root.left)
-            R = depth(root.right)
-            self.length = max(self.length, L + R + 1)
-            return max(L, R) + 1
-        
-        depth(root)
-        return self.length - 1
-    
-    def copyRandomList(self, head):
-        if not head: return None
-        
-        # Insert a identity node without it's random pointer
-        tmp = head
-        while tmp:
-            newNode = RandomListNode(tmp.label, None, None)
-            newNode.next = tmp.next
-            tmp.next = newNode
-            tmp = tmp.next.next
-            
-        tmp = head
-        # Move the random pointer to new Node
-        while tmp:
-            if tmp.random:
-                tmp.next.random = tmp.random.next
-            tmp = tmp.next.next
-                
-        # Seperate old list from new list
-        newHead = head.next
-        pold = head
-        pnew = newHead
-        while pnew.next:
-            pold.next = pnew.next
-            pold = pold.next
-            pnew.next = pold.next
-            pnew = pnew.next
-            
-        return newHead
-                
-        
+
+
 class RandomListNode:
     def __init__(self, x):
         self.label = x
         self.next = None
         self.random = None
-    
+
 import heapq
 class KthLargest():
     def __init__(self, k, nums):
@@ -704,12 +720,12 @@ class KthLargest():
             heapq.heappush(self.nums, val)
         else:
             heapq.heappushpop(self.nums, val)
-        
+
         return self.nums[0]
-        
-            
+
+
 class MinStack:
-    
+
     def __init__(self):
         self.stack = [(None, float('inf'))]
     def push(self, x):
