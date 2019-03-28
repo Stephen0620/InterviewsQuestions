@@ -484,6 +484,68 @@ class Solution:
                 max_diff = price - min_price
             
         return max_diff
+    
+    def hasPath(self, maze, start, destination):
+        visited = [[False for i in range(len(maze[0]))]for j in range(len(maze))]
+        def dfs(maze, start, destination, visited): 
+            if visited[start[0]][start[1]]:
+                return False
+            if start == destination:
+                return True
+            visited[start[0]][start[1]] = True
+            r, l, u, d = start[1] + 1, start[1] - 1, start[0] - 1, start[0] + 1
+            
+            while(r < len(maze[0]) and maze[start[0]][r] == 0): # right
+                r += 1
+            if dfs(maze, [start[0], r - 1], destination, visited):
+                return True
+            
+            while(l >= 0 and maze[start[0]][l] == 0):    # left
+                l -=1
+            if dfs(maze, [start[0], l + 1], destination, visited):
+                return True
+            
+            while(d < len(maze) and maze[d][start[1]] == 0):
+                d += 1
+            if dfs(maze, [d - 1, start[1]], destination, visited):
+                return True
+            
+            while(u >= 0 and maze[u][start[1]] == 0):
+                u -= 1
+            if dfs(maze, [u + 1, start[1]], destination, visited):
+                return True
+            
+            
+            return False
+        
+        return dfs(maze, start, destination, visited)
+    
+    def ladderLength(self, beginWord, endWord, wordList):
+        from collections import defaultdict
+        if endWord not in wordList or not beginWord or not endWord or not wordList:
+            return 0
+        
+        all_combo_dict = defaultdict(list)
+        L = len(beginWord)
+        # Prepare a look a table for the word list
+        for word in wordList:
+            for i in range(L):
+                all_combo_dict[word[:i] + '*' + word[i+1:]].append(word)
+                
+        queue = [(beginWord, 1)]
+        visited = [beginWord]
+        while queue:
+            current_word, level = queue.pop(0)
+            for i in range(L):
+                intermediates = current_word[:i] + '*' + current_word[i+1:]
+                for next_state in all_combo_dict[intermediates]:
+                    if next_state == endWord:
+                        return level + 1
+                    
+                    if next_state not in visited:
+                        queue.append((next_state, level + 1))
+                        visited.append(next_state)
+        return 0
             
 class MyQueue:
     def __init__(self):
@@ -579,4 +641,82 @@ class LRUCache:
                 tail = self._remove_tail()
                 del self.cache[tail.key]
                 self.size -= 1
+                
+    def diameterOfBinaryTree(self, root):
+        self.length = 1
+        def depth(root):
+            if not root: return 0
+            L = depth(root.left)
+            R = depth(root.right)
+            self.length = max(self.length, L + R + 1)
+            return max(L, R) + 1
         
+        depth(root)
+        return self.length - 1
+    
+    def copyRandomList(self, head):
+        if not head: return None
+        
+        # Insert a identity node without it's random pointer
+        tmp = head
+        while tmp:
+            newNode = RandomListNode(tmp.label, None, None)
+            newNode.next = tmp.next
+            tmp.next = newNode
+            tmp = tmp.next.next
+            
+        tmp = head
+        # Move the random pointer to new Node
+        while tmp:
+            if tmp.random:
+                tmp.next.random = tmp.random.next
+            tmp = tmp.next.next
+                
+        # Seperate old list from new list
+        newHead = head.next
+        pold = head
+        pnew = newHead
+        while pnew.next:
+            pold.next = pnew.next
+            pold = pold.next
+            pnew.next = pold.next
+            pnew = pnew.next
+            
+        return newHead
+                
+        
+class RandomListNode:
+    def __init__(self, x):
+        self.label = x
+        self.next = None
+        self.random = None
+    
+import heapq
+class KthLargest():
+    def __init__(self, k, nums):
+        self.k = k
+        self.nums = nums
+        heapq.heapify(self.nums)
+        while len(self.nums) > k:
+            heapq.heappop(nums)
+    def add(self, val):
+        if len(self.nums) < self.k:
+            heapq.heappush(self.nums, val)
+        else:
+            heapq.heappushpop(self.nums, val)
+        
+        return self.nums[0]
+        
+            
+class MinStack:
+    
+    def __init__(self):
+        self.stack = [(None, float('inf'))]
+    def push(self, x):
+        self.stack.append((x, min(x, self.stack[-1][1])))
+    def pop(self):
+        if len(self.stack) > 1: self.stack.pop()
+    def top(self):
+        return self.stack[-1][0]
+    def getMin(self):
+        return self.stack[-1][-1]
