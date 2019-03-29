@@ -590,6 +590,7 @@ class Solution:
         return newHead
 
     def floodFill(self, image, sr, sc, newColor):
+        # DFS
         color = image[sr][sc]
         n_row = len(image)
         n_col = len(image[0])
@@ -603,6 +604,27 @@ class Solution:
                 if c < n_col - 1: dfs(r, c + 1)   # Moving right
         dfs(sr, sc)
         return image
+
+    def reverse(self, x):
+        INT_MAX = 2 ** 31
+        INT_MIN = -2 ** 31
+        isNegative = x < 0
+        if isNegative:
+            x = x * -1
+        rev = 0
+        while x != 0:
+            pop = x % 10
+            x = x // 10
+            if rev > INT_MAX // 10 or (rev == INT_MAX // 10 and pop > 7):
+                return 0
+            if -rev < INT_MIN // 10 or (-rev == INT_MIN // 10 and pop < -8):
+                return 0
+
+            rev = rev * 10 + pop
+
+        if isNegative:
+            return -rev
+        return rev
 
 
 class MyQueue:
