@@ -606,7 +606,7 @@ class Solution:
         return image
 
     def reverse(self, x):
-        INT_MAX = 2 ** 31
+        INT_MAX = 2 ** 31 - 1
         INT_MIN = -2 ** 31
         isNegative = x < 0
         if isNegative:
@@ -625,6 +625,43 @@ class Solution:
         if isNegative:
             return -rev
         return rev
+
+    def myAtoi(self, sequence):
+        INT_MAX = 2 ** 31 - 1
+        INT_MIN = -2 ** 31
+        switch = False
+        isNegative = False
+        whiteList = [str(ele) for ele in range(10)]
+        answer = 0
+        whiteList.append('-')
+        whiteList.append('+')
+
+        for ele in sequence:
+            if ele == ' ' and switch:
+                break
+            if ele != ' ' and ele not in whiteList and not switch:
+                return 0
+            if ele != ' ' and ele not in whiteList and switch:
+                break
+            if ele != ' ' and ele in whiteList:
+                if not switch:
+                    whiteList.pop() # Took out '+'
+                    whiteList.pop() # Took out '-'
+                switch = True
+
+                if ele == '-':
+                    isNegative = True
+                    continue
+                if ele == '+':
+                    continue
+                answer = answer * 10 + int(ele)
+        if isNegative:
+            if -answer < INT_MIN:
+                return INT_MIN
+            return -answer
+        if answer > INT_MAX:
+            return INT_MAX
+        return answer
 
 
 class MyQueue:
