@@ -662,6 +662,7 @@ class Solution:
         if answer > INT_MAX:
             return INT_MAX
         return answer
+
     def isPalindrome(self, x):
         if x < 0:
             return False
@@ -675,6 +676,42 @@ class Solution:
                 return helper(x[1:-1])
         return helper(x)
 
+    def intToRoman(self, num):
+        look_table = {1000: 'M',
+                      500: 'D',
+                      100: 'C',
+                      50: 'L',
+                      10: 'X',
+                      5: 'V',
+                      1: 'I',
+                      }
+        self.answer = ''
+        def helper(num, base, divide_two, flag):
+            if base == 0:
+                return
+            if base == 1000:
+                for pop in range(num // base): self.answer = self.answer + look_table[base]
+            else:
+                if num // base == 4 and flag:   # Handle 9***
+                    self.answer = self.answer[:-1] + look_table[base] + look_table[base * 10]
+                elif num // base == 4 and (not flag):   # Handle 4***
+                    self.answer = self.answer + look_table[base] + look_table[base * 5]
+                else:
+                    for _ in range(num // base):
+                        self.answer = self.answer + look_table[base]
+                if num > base:
+                    flag = True
+                else:
+                    flag = False
+
+            if divide_two:
+                helper(num % base, base // 2, not divide_two, flag)
+            else:
+                helper(num % base, base // 5, not divide_two, flag)
+
+
+        helper(num, 1000, True, False)
+        return self.answer
 
 class MyQueue:
     def __init__(self):
