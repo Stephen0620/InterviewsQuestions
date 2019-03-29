@@ -662,6 +662,18 @@ class Solution:
         if answer > INT_MAX:
             return INT_MAX
         return answer
+    def isPalindrome(self, x):
+        if x < 0:
+            return False
+        x = str(x)
+        def helper(x):
+            if not x:
+                return True
+            if x[0] != x[-1]:
+                return False
+            else:
+                return helper(x[1:-1])
+        return helper(x)
 
 
 class MyQueue:
