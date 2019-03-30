@@ -780,6 +780,55 @@ class Solution:
 
         return found
 
+    def fourSum(self, nums, target):
+        nums.sort()
+        found = []
+        for i in range(len(nums)):
+            if target < 0 and nums[i] > 0:
+                break
+            if target > 0 and nums[i] > target:
+                break
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            res = target - nums[i]
+            for j in range(i + 1, len(nums)):
+                if j > i + 1 and nums[j] == nums[j - 1]:
+                    continue
+                left = j + 1
+                right = len(nums) - 1
+                while left < right:
+                    L = [nums[i], nums[j], nums[left], nums[right]]
+                    if sum(L) == target and L not in found:
+                        found.append(L)
+                        right = right - 1
+                    elif sum(L) < target:
+                        left += 1
+                    else:
+                        right -= 1
+
+        return found
+
+    def threeSumClosest(self, nums, target):
+        nums.sort()
+        dic = {}
+        for i in range(len(nums) - 2):
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+            l = i + 1
+            r = len(nums) - 1
+            while l < r:
+                sum = nums[i] + nums[l] + nums[r]
+                if sum < target:
+                    l += 1
+                    dic[sum] = target - sum
+                elif sum > target:
+                    r -= 1
+                    dic[sum] = sum - target
+                else:
+                    return target
+        return min(dic, key=dic.get)
+
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
