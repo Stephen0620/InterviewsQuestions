@@ -327,30 +327,6 @@ class Solution:
         self._helper(answer, root.right, depth + 1, not direction)
         self._helper(answer, root.left, depth + 1, not direction)
 
-    def threeSum(self, nums):
-        nums.sort()
-        found = []
-
-        for index, num in enumerate(nums):
-            left = index + 1
-            right = len(nums) - 1
-            while left < right:
-                Sum = num + nums[left] + nums[right]
-                print('num: ' + str(num))
-                print('left: ' + str(nums[left]))
-                print('right: ' + str(nums[right]))
-                print('sum: ' + str(Sum))
-                if Sum == 0 and not [num, nums[left], nums[right]] in found:
-                    print([num, nums[left], nums[right]])
-                    found.append([num, nums[left], nums[right]])
-                    right = right - 1
-                elif Sum > 0:
-                    right -= 1
-                else:
-                    left += 1
-
-        return found
-
     def combinationSum(self, candidates, target):
         def helper(self, target, candidates, idx, path, res):
             if target < 0 :
@@ -755,7 +731,54 @@ class Solution:
         helper(sequence)
         return self.answer
 
+    def longestCommonPrefix(self, list_sequence):
+        if len(list_sequence) == 0:
+            return ""
+        self.answer = list_sequence[0]
+        def compare(s1, s2):
+            idx = -1
+            for i in range(min(len(s1), len(s2))):
+                if s1[i] != s2[i]:
+                    break
+                idx = i
+            return s1[:idx + 1]
 
+        for i in range(1, len(list_sequence)):
+            self.answer = compare(self.answer, list_sequence[i])
+
+        return self.answer
+
+    def removeDuplicates(self, nums):
+        if len(nums) == 0: return 0
+        slow_run = 0
+        for fast_run in range(1, len(nums)):
+            if nums[fast_run] != nums[slow_run]:
+                slow_run += 1
+                nums[slow_run] = nums[fast_run]
+        nums = nums[:slow_run]
+        return nums[:slow_run]
+
+    def threeSum(self, nums):
+        nums.sort()
+        found = []
+
+        for index, num in enumerate(nums):
+            if num > 0:
+                break
+            if index > 0 and num == nums[index - 1]: continue
+            left = index + 1
+            right = len(nums) - 1
+            while left < right:
+                Sum = num + nums[left] + nums[right]
+                if Sum == 0 and not [num, nums[left], nums[right]] in found:
+                    found.append([num, nums[left], nums[right]])
+                    right = right - 1
+                elif Sum > 0:
+                    right -= 1
+                else:
+                    left += 1
+
+        return found
 
 class MyQueue:
     def __init__(self):
