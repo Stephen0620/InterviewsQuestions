@@ -713,6 +713,50 @@ class Solution:
         helper(num, 1000, True, False)
         return self.answer
 
+    def romanToInt(self, sequence):
+        look_table = {'M': 1000,
+                      'D': 500,
+                      'C': 100,
+                      'L': 50,
+                      'X': 10,
+                      'V': 5,
+                      "I": 1,
+                      }
+        self.answer = 0
+        def helper(sequence):
+            if len(sequence) == 0:
+                return
+            if sequence[0] == 'C':
+                if len(sequence) > 1 and (sequence[1] == 'D' or sequence[1] == 'M'):
+                    self.answer = self.answer + (look_table[sequence[1]] - look_table[sequence[0]])
+                    helper(sequence[2:])
+                else:
+                    self.answer = self.answer + look_table[sequence[0]]
+                    helper(sequence[1:])
+            elif sequence[0] == 'X':
+                if len(sequence) > 1 and (sequence[1] == 'L' or sequence[1] == 'C'):
+                    self.answer = self.answer + look_table[sequence[1]] - look_table[sequence[0]]
+                    helper(sequence[2:])
+                else:
+                    self.answer = self.answer + look_table[sequence[0]]
+                    helper(sequence[1:])
+            elif sequence[0] == 'I':
+                if len(sequence) > 1 and (sequence[1] == 'V' or sequence[1] == 'X'):
+                    self.answer = self.answer + look_table[sequence[1]] - look_table[sequence[0]]
+                    print(self.answer)
+                    helper(sequence[2:])
+                else:
+                    self.answer = self.answer + look_table[sequence[0]]
+                    helper(sequence[1:])
+            else:
+                self.answer = self.answer + look_table[sequence[0]]
+                helper(sequence[1:])
+
+        helper(sequence)
+        return self.answer
+
+
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
