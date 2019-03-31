@@ -828,6 +828,24 @@ class Solution:
                     return target
         return min(dic, key=dic.get)
 
+    def isValid(self, s):
+        look_table = {')': '(',
+                      '}': '{',
+                      ']': '['
+                     }
+        if not s or len(s) % 2 != 0:
+            return False
+
+        stack = []
+        for val in s:
+            if val in look_table:
+                if stack and stack.pop() != value:
+                    return False
+            else:
+                stack.append(val)
+
+        return not stack
+
 
 class MyQueue:
     def __init__(self):
