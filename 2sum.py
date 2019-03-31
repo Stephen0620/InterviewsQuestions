@@ -15,4 +15,4 @@ class Solution:
 
 solution = Solution()
 index = solution.twoSum([3,2,4], 6) 
-print(index)           
+print(index) ###           

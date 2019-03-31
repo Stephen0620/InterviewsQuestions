@@ -846,6 +846,22 @@ class Solution:
 
         return not stack
 
+    def generateParenthesis(self, n):
+        # using backtrack algorithm
+        self.answer = []
+        def helper(S = '', open = 0, close = 0):
+            if len(S) == 2 * n:
+                self.answer.append(S)
+                return
+            if open < n:
+                helper(S+'(', open + 1, close)
+            if close < open:
+                helper(S+')', open, close + 1)
+
+        helper()
+        return self.answer
+
+
 
 class MyQueue:
     def __init__(self):
