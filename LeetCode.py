@@ -861,7 +861,31 @@ class Solution:
         helper()
         return self.answer
 
+    def removeElement(self, nums, val):
+        i = 0
+        for j in range(len(nums)):
+            if nums[j] != val:
+                nums[i] = nums[j]
+                i += 1
 
+        return i
+
+    def removeElement(self, nums, val):
+        i = 0
+        for j in range(len(nums)):
+            if nums[j] != val:
+                nums[i] = nums[j]
+                i += 1
+
+        return i
+
+    def strStr(self, haystack, needle):
+        index = -1
+        for i in range(len(haystack) - len(needle) + 1):
+            if haystack[i:i+len(needle)] == needle:
+                return i
+
+        return index
 
 class MyQueue:
     def __init__(self):
