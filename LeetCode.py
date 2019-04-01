@@ -887,6 +887,42 @@ class Solution:
 
         return index
 
+    def nextPermutation(self, nums):
+    def nextPermutation(self, nums):
+        # find the decreased number, find the element that "just larger" than
+        # the decreased number -> swap them -> reverse the order of the array
+        # after that index
+        if len(nums) < 2:
+            return
+
+        def get_next_larger_number_index(index, nums):
+            next_larger_number_index = len(nums)-1
+            for position in range(index+1, len(nums)):
+                if nums[position] <= nums[index]:
+                    next_larger_number_index = position - 1
+                    break
+            return next_larger_number_index
+
+        def reverse_num_list(start_index, nums):
+            start, end = start_index, len(nums)-1
+            while start < end:
+                nums[start], nums[end] = nums[end], nums[start]
+                start += 1
+                end -= 1
+
+
+        previous_number = nums[-1]
+        for index in range(len(nums)-2, -1, -1):
+            if nums[index] < previous_number:
+                swap_index = get_next_larger_number_index(index, nums)
+                nums[index], nums[swap_index] = nums[swap_index], nums[index]
+                reverse_num_list(index+1, nums)
+                return
+            previous_number = nums[index]
+
+
+        reverse_num_list(0, nums)
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
