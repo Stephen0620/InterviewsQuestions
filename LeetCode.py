@@ -870,15 +870,6 @@ class Solution:
 
         return i
 
-    def removeElement(self, nums, val):
-        i = 0
-        for j in range(len(nums)):
-            if nums[j] != val:
-                nums[i] = nums[j]
-                i += 1
-
-        return i
-
     def strStr(self, haystack, needle):
         index = -1
         for i in range(len(haystack) - len(needle) + 1):
@@ -887,7 +878,6 @@ class Solution:
 
         return index
 
-    def nextPermutation(self, nums):
     def nextPermutation(self, nums):
         # find the decreased number, find the element that "just larger" than
         # the decreased number -> swap them -> reverse the order of the array
@@ -920,9 +910,19 @@ class Solution:
                 return
             previous_number = nums[index]
 
-
         reverse_num_list(0, nums)
 
+    def search(self, nums, target):
+        def find_smallest_index(nums, low, high):
+            # [7, 8, 1, 2, 3, 4, 5, 6]
+            # [4, 5, 6, 7, 8, 1, 2, 3]
+            if nums[0] < nums[-1]:
+                return 0
+            mid = (low + high) // 2
+
+            if nums[mid] > nums[mid + 1]
+
+        smallest_index = find_smallest_index(nums, 0, len(nums) - 1)
 class MyQueue:
     def __init__(self):
         self.s1 = []
