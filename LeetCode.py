@@ -1077,6 +1077,35 @@ class Solution:
         helper(target, 0, [], res)
         return res
 
+    def permutation(self, nums):
+        # Use back tracing to rewrite this one
+        nums.sort()
+        self.answer = []
+        def reverse_num_list(nums, start, end):
+            if start <= end:
+                return
+            else:
+                nums[start], nums[end] = nums[start], nums[end]
+                reverse_num_list(nums, start + 1, end - 1)
+        def nextPermutation(nums):
+            for i in range(len(nums) - 2, -1, -1):
+                if nums[i] < nums[i + 1]:
+                    next_min_idx = i
+
+                    # For getting the next min_idx fow swapping
+                    for j in range(i, len(nums)):
+                        if nums[j] > nums[i]:
+                            next_min_idx = j
+                            break
+                    nums[i], nums[next_min_idx] = nums[next_min_idx], nums[i]
+                    reverse_num_list(nums, i + 1, len(nums) - 1)
+                    self.answer.append(nums)
+                    return True
+            return False
+
+        while nextPermutation(nums):
+            continue
+
 
 class MyQueue:
     def __init__(self):
