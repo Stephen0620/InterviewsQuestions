@@ -1049,6 +1049,17 @@ class Solution:
 
         return True
 
+    def rotate(self, matrix):
+        # transpose it first
+        for i in range(len(matrix)): # row
+            for j in range(i, len(matrix[i])):   # col
+                if i == j:
+                    continue
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        
+        for i in range(len(matrix)):
+            matrix[i].reverse()
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
