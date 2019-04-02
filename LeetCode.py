@@ -913,16 +913,104 @@ class Solution:
         reverse_num_list(0, nums)
 
     def search(self, nums, target):
+        if len(nums) == 0:
+            return -1
+        if len(nums) == 1:
+            if nums[0] == target: return 0
+            else: return -1
         def find_smallest_index(nums, low, high):
             # [7, 8, 1, 2, 3, 4, 5, 6]
             # [4, 5, 6, 7, 8, 1, 2, 3]
-            if nums[0] < nums[-1]:
+            # [5, 6, 7, 8, 1, 2, 3, 4]
+            if nums[0] < nums[-1]:  # Handle not rotated case
                 return 0
+            if low == high:
+                return low
             mid = (low + high) // 2
 
-            if nums[mid] > nums[mid + 1]
+            # This section checks if mid + 1 or mid is minimum
+            if mid < high and nums[mid] > nums[mid + 1]:
+                return mid + 1
+            if mid > low and nums[mid] < nums[mid - 1]:
+                return mid
 
-        smallest_index = find_smallest_index(nums, 0, len(nums) - 1)
+            # This section determines if we should search the left part or right part
+            if nums[mid] > nums[low]:   # Search right part
+                return find_smallest_index(nums, mid + 1, high)
+            return find_smallest_index(nums, low, mid)  # Otherwise, search the left part
+
+        def binary_search(nums, left, right):
+            if len(nums) == 0:
+                return -1
+            if left >= right and nums[left] != target:
+                return -1
+            mid = (left + right) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[mid] > target:  # search left side
+                return binary_search(nums, left, mid)
+            if nums[mid] < target:
+                return binary_search(nums, mid + 1, right)
+
+
+        # [7, 8, 1, 2, 3, 4, 5, 6]
+        min_idx = find_smallest_index(nums, 0, len(nums) - 1)
+        if target == nums[min_idx]:
+            return min_idx
+        if target > nums[min_idx] and target <= nums[min_idx:][-1]:  # search right side of the pivot
+            return binary_search(nums, min_idx + 1, len(nums) - 1)
+        return binary_search(nums, 0, min_idx)
+
+    def searchRange(self, nums, target):
+        if len(nums) == 0:
+            return [-1, -1]
+        self.answer = [-1, -1]
+        self.tmp = -1
+        # locate at least one target
+        def helper(nums, low, high):
+            if low == high: # Exit condition
+                if nums[low] != target: return
+
+            mid = (low + high) // 2
+            #print('low: ' + str(low))
+            #print('high: ' + str(high))
+            if nums[mid] == target:
+                self.tmp = mid
+                return 
+            if nums[mid] > target:
+                helper(nums, low, mid)
+            else:
+                helper(nums, mid + 1, high)
+        
+        # seach left side
+        def search_left(nums, high):
+            if high < 0:
+                self.answer[0] = 0
+                return 
+            if nums[high] < target:
+                self.answer[0] = high + 1
+                return 
+            if nums[high] >= target:
+                search_left(nums, high - 1)
+        
+        def search_right(nums, low):
+            if low >= len(nums):
+                self.answer[-1] = len(nums) - 1
+                return 
+            if nums[low] > target:
+                self.answer[-1] = low - 1
+            else:
+                search_right(nums, low + 1)
+              
+        helper(nums, 0, len(nums) - 1)
+        print(self.tmp)
+        if self.tmp == -1: return self.answer
+        else: 
+            self.answer[0], self.answer[1] = self.tmp, self.tmp
+            search_left(nums, self.tmp)
+            search_right(nums, self.tmp)
+        return self.answer
+
 class MyQueue:
     def __init__(self):
         self.s1 = []
