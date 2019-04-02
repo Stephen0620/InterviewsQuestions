@@ -327,20 +327,6 @@ class Solution:
         self._helper(answer, root.right, depth + 1, not direction)
         self._helper(answer, root.left, depth + 1, not direction)
 
-    def combinationSum(self, candidates, target):
-        def helper(self, target, candidates, idx, path, res):
-            if target < 0 :
-                return
-            if target == 0:
-                res.append(path)
-                return
-            for i in range(idx, len(candidates)):
-                self.helper(target - candidates[i], candidates, i, path+[candidates[i]], res)
-
-        res = []
-        helper(target, candidates, 0, [], res)
-        return res
-
     def kClosest(self, points, k):
         dist = lambda i: points[i][0]**2 + points[i][1]**2
 
@@ -1056,9 +1042,41 @@ class Solution:
                 if i == j:
                     continue
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
-        
+
         for i in range(len(matrix)):
             matrix[i].reverse()
+
+    def combinationSum(self, candidates, target):
+        def helper(target, idx, path, res):
+            if target < 0 :
+                return
+            if target == 0:
+                res.append(path)
+                return
+            for i in range(idx, len(candidates)):
+                helper(target - candidates[i], i, path+[candidates[i]], res)
+
+        res = []
+        helper(target, 0, [], res)
+        return res
+
+    def combinationSum2(self, candidates, target):
+        # This method can be optimized
+        def helper(target, idx, path, res):
+            if target < 0 :
+                return
+            if target == 0:
+                if path not in res:
+                    res.append(path)
+                return
+            for i in range(idx, len(candidates)):
+                helper(target - candidates[i], i + 1, path+[candidates[i]], res)
+
+        candidates.sort()
+        res = []
+        helper(target, 0, [], res)
+        return res
+
 
 class MyQueue:
     def __init__(self):
