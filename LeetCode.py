@@ -976,40 +976,59 @@ class Solution:
             #print('high: ' + str(high))
             if nums[mid] == target:
                 self.tmp = mid
-                return 
+                return
             if nums[mid] > target:
                 helper(nums, low, mid)
             else:
                 helper(nums, mid + 1, high)
-        
+
         # seach left side
         def search_left(nums, high):
             if high < 0:
                 self.answer[0] = 0
-                return 
+                return
             if nums[high] < target:
                 self.answer[0] = high + 1
-                return 
+                return
             if nums[high] >= target:
                 search_left(nums, high - 1)
-        
+
         def search_right(nums, low):
             if low >= len(nums):
                 self.answer[-1] = len(nums) - 1
-                return 
+                return
             if nums[low] > target:
                 self.answer[-1] = low - 1
             else:
                 search_right(nums, low + 1)
-              
+
         helper(nums, 0, len(nums) - 1)
         print(self.tmp)
         if self.tmp == -1: return self.answer
-        else: 
+        else:
             self.answer[0], self.answer[1] = self.tmp, self.tmp
             search_left(nums, self.tmp)
             search_right(nums, self.tmp)
         return self.answer
+
+    def searchInsert(self, nums, target):
+        if len(nums) == 0:
+            return 0
+        def helper(nums, low, high):
+            if low == high: # Exit condition
+                if nums[low] > target: return high
+                if nums[low] < target: return low + 1
+
+            mid = (low + high) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[mid] > target:
+                return helper(nums, low, mid)
+            else:
+                return helper(nums, mid + 1, high)
+
+        return helper(nums, 0, len(nums) - 1)
+
 
 class MyQueue:
     def __init__(self):
