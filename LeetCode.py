@@ -1029,6 +1029,25 @@ class Solution:
 
         return helper(nums, 0, len(nums) - 1)
 
+    def isValidSudoku(self, board):
+        row = [{} for i in range(9)]
+        column = [{} for i in range(9)]
+        box = [{} for i in range(9)]
+
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == '.':
+                    continue
+                box_index = (i // 3 ) * 3 + j // 3
+                if board[i][j] in row[i] or board[i][j] in column[j] or (
+                    board[i][j] in box[box_index]):
+                    return False
+                else:
+                    row[i][board[i][j]] = 1
+                    column[j][board[i][j]] = 1
+                    box[box_index][board[i][j]] = 1
+
+        return True
 
 class MyQueue:
     def __init__(self):
