@@ -1078,35 +1078,94 @@ class Solution:
         return res
 
     def permutation(self, nums):
-        # Use back tracing to rewrite this one
-        nums.sort()
+        # Read Back tracking, you really need to lean this
         self.answer = []
-        def reverse_num_list(nums, start, end):
-            if start <= end:
-                return
+        def backtrack(first = 0):
+            if first == len(nums):
+                self.answer.append(nums[:])
+            for i in range(first, len(nums)):
+                nums[first], nums[i] = nums[i], nums[first]
+                backtrack(first + 1)
+                # Recover Swap
+                nums[first], nums[i] = nums[i], nums[first]
+
+        backtrack()
+        return self.answer
+
+    def groupAnagrams(self, strs):
+        from collections import defaultdict
+        output = defaultdict(list)
+        for string in strs:
+            string_list = [ele for ele in string]
+            string_list.sort()
+            string_list = tuple(string_list)
+            output[string_list] += [string]
+        
+        return [value for key, value in output.items()]
+    
+    def maxSubArray(self, nums):
+        maxSum = -(2 ** 31)
+        prevSum = -(2 ** 31)
+        for ele in nums:
+            prevSum = max(ele, prevSum + ele)
+            maxSum = max(prevSum, maxSum)
+        
+        return maxSum
+    
+    def spiralOrder(self, matrix):
+        visited = [[False for i in range(len(matrix[0]))]for j in range(len(matrix))]
+        self.answer = []
+        n_col = len(matrix[0])
+        n_row = len(matrix)
+        
+        def travelRight(matrix, row, col):
+            self.answer.append(matrix[row][col])
+            visited[row][col] = True
+            if col + 1 < n_col and not visited[row][col + 1]:
+                travelRight(matrix, row, col + 1)
+            else: 
+                if row + 1 < n_row and not visited[row + 1][col]:
+                    travelDown(matrix, row + 1, col)
+                else:
+                    return 
+        
+        def travelDown(matrix, row, col):
+            self.answer.append(matrix[row][col])
+            visited[row][col] = True
+            if row + 1 < n_row and not visited[row + 1][col]:
+                travelDown(matrix, row + 1, col)
+            else: 
+                if col - 1 >= 0 and not visited[row][col - 1]:
+                    travelLeft(matrix, row, col - 1)
+                else:
+                    return
+        
+        def travelLeft(matrix, row, col):
+            self.answer.append(matrix[row][col])
+            visited[row][col] = True
+            if col - 1 >= 0 and not visited[row][col - 1]:
+                travelLeft(matrix, row, col - 1)
             else:
-                nums[start], nums[end] = nums[start], nums[end]
-                reverse_num_list(nums, start + 1, end - 1)
-        def nextPermutation(nums):
-            for i in range(len(nums) - 2, -1, -1):
-                if nums[i] < nums[i + 1]:
-                    next_min_idx = i
-
-                    # For getting the next min_idx fow swapping
-                    for j in range(i, len(nums)):
-                        if nums[j] > nums[i]:
-                            next_min_idx = j
-                            break
-                    nums[i], nums[next_min_idx] = nums[next_min_idx], nums[i]
-                    reverse_num_list(nums, i + 1, len(nums) - 1)
-                    self.answer.append(nums)
-                    return True
-            return False
-
-        while nextPermutation(nums):
-            continue
-
-
+                if row - 1 >= 0 and not visited[row - 1][col]:
+                    travelUp(matrix, row - 1, col)
+                else:
+                    return 
+                
+        def travelUp(matrix, row, col):
+            self.answer.append(matrix[row][col])
+            visited[row][col] = True
+            if row - 1 >= 0 and not visited[row - 1][col]:
+                travelUp(matrix, row - 1, col)
+            else: 
+                if col + 1 < n_col and not visited[row][col + 1]:
+                    travelRight(matrix, row, col + 1)
+                else:
+                    return
+            
+        travelRight(matrix, 0, 0)
+        return self.answer
+                
+            
 class MyQueue:
     def __init__(self):
         self.s1 = []
