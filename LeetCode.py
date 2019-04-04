@@ -1164,7 +1164,66 @@ class Solution:
             
         travelRight(matrix, 0, 0)
         return self.answer
+    
+    def canJump(self, nums):
+        # [3, 2, 1, 1, 4]
+        last_pos = len(nums) - 1
+        for i in range(len(nums) - 2, -1, -1):
+            if i + nums[i] >= last_pos:
+                last_pos = i
                 
+        return last_pos == 0
+    
+    def numCombination(self, sequence):
+        # Using back tracking
+        look_table = {2: 'ABC', 
+                      3: 'DEF', 
+                      4: 'GHI', 
+                      5: 'JKL', 
+                      6: 'MNOP', 
+                      7: 'TUV', 
+                      8: 'WXYZ'}
+        clicked = []
+        for ele in sequence:
+            clicked.append(look_table[ele])
+            
+        self.answer = []
+        self.combination = ''
+        def helper(index):
+            if len(self.combination) == len(sequence):
+                self.answer.append(self.combination)
+                return 
+            for ele in clicked[index]:
+                self.combination = self.combination + ele
+                helper(index + 1)
+                self.combination = self.combination[:-1]
+            
+        helper(0)
+        return self.answer
+    def merge(self, nums):
+        nums.sort(key = lambda x: x[0])
+        
+        self.intervals = []
+        max_end = 0
+        print(nums)
+        for i in range(len(nums)):
+            start, end = nums[i]
+            print('max_end: ' + str(max_end))
+            print('start: ' + str(start))
+            if start == 0 and len(self.intervals) == 0:
+                self.intervals.append(nums[i])
+                max_end = end
+            elif start > max_end:
+                self.intervals.append(nums[i])  
+                max_end = max(max_end, end)
+            else:
+                prev_start, prev_end = self.intervals[-1]
+                self.intervals[-1][0], self.intervals[-1][1] = min(prev_start, start), max(prev_end, end)
+                max_end = max(max_end, self.intervals[-1][1])
+        
+        return self.intervals
+            
+    
             
 class MyQueue:
     def __init__(self):
