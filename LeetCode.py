@@ -1316,6 +1316,49 @@ class Solution:
             simplyPath += '/'
         
         return simplyPath[:-1]
+    
+    def searchMatrix(self, matrix, target):
+        # Use divide and conquer
+        # First: locate which row
+        # Second: see which col match the target
+        if target > matrix[-1][-1]: return False
+        if target < matrix[0][0]: return False
+        
+        def searchRow(start, end):
+            if start == end:
+                return start
+            mid = (start + end) // 2
+            if matrix[mid][-1] == target:
+                return mid
+            if matrix[mid][-1] > target:
+                if matrix[mid][0] < target:
+                    return mid
+                return searchRow(start, mid)
+            if matrix[mid][-1] < target:
+                return searchRow(mid + 1, end)
+            
+        def searchCol(row_matrix, start, end):
+            if start == end:
+                if row_matrix[start] == target: return True
+                else: return False
+            mid = (start + end) // 2
+            if row_matrix[mid] == target:
+                return True
+            if row_matrix[mid] > target:
+                return searchCol(row_matrix, start, mid)
+            if row_matrix[mid] < target:
+                return searchCol(row_matrix, mid + 1, end)
+
+        row = searchRow(0, len(matrix) - 1)
+        # print(row)
+        if row == 0 and matrix[row][0] > target:
+            return False
+        if row == len(matrix) - 1 and matrix[row][-1] < target:
+            return False
+        
+        return searchCol(matrix[row], 0, len(matrix[row]) - 1)
+                
+                
            
 class MyQueue:
     def __init__(self):
