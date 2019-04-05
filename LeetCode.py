@@ -1263,10 +1263,60 @@ class Solution:
                                      grid[i][j] + grid[i][j - 1])
         
         return grid[-1][-1]
-                
-            
     
+    def plusOne(self, digits):
+        self.answer = []
+        def helper(nums, overFlow):
+            if len(nums) == 0 and overFlow != 0:
+                self.answer.append(overFlow)
+            if len(nums) == 0:
+                return
+            temp = overFlow + nums[-1] 
+            self.answer.append(temp % 10)
+            helper(nums[:-1], temp // 10)
             
+        helper(digits, 1)
+        self.answer.reverse()
+        return self.answer
+    
+    def climbStairs(self, n):
+        # Use back tracking ?? ---> Nope, dynamic programming
+        # Fibonacci method
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        
+        self.count = 0
+        def helper(prev_prev, prev):    
+            # prev_prev means 2 steps before
+            # prev means 1 step before
+            if self.count == n - 3:
+                return prev_prev + prev
+            self.count += 1
+            return helper(prev, prev_prev + prev)
+            
+        return helper(1, 2)
+    
+    def simplifyPath(self, path):
+        stack = []
+        path = path.split('/')
+        for ele in path:
+            if ele == '.' or ele == '':
+                continue
+            if ele == '..':
+                if len(stack) != 0: stack.pop()
+            else:
+                stack.append(ele)
+
+        if len(stack) == 0: return '/'
+        simplyPath = '/'
+        for ele in stack:
+            simplyPath += ele
+            simplyPath += '/'
+        
+        return simplyPath[:-1]
+           
 class MyQueue:
     def __init__(self):
         self.s1 = []
