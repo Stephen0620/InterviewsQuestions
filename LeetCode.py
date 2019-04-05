@@ -1222,6 +1222,48 @@ class Solution:
                 max_end = max(max_end, self.intervals[-1][1])
         
         return self.intervals
+    
+    def uniquePaths(self, n_rows, n_cols):
+        dp_map = [[1 for i in range(n_cols)] for j in range(n_rows)]
+        
+        for i in range(1, len(dp_map)):
+            for j in range(1, len(dp_map[i])):
+                dp_map[i][j] = dp_map[i - 1][j] + dp_map[i][j - 1]
+                    
+        return dp_map[-1][-1]
+    
+    def uniquePathsWithObstacles(self, grid):
+        dp_map = [[0 for i in range(len(grid[0]))] for j in range(len(grid))]
+        if len(grid[0]) == 0:
+            return 0
+        for i in range(0, len(dp_map)):
+            for j in range(0, len(dp_map[i])):
+                if grid[i][j] == 1: dp_map[i][j] == 0
+                elif i == 0 and j == 0: dp_map[i][j] = 1
+                elif i == 0:
+                    dp_map[i][j] = dp_map[i][j - 1]
+                elif j == 0:
+                    dp_map[i][j] = dp_map[i - 1][j]
+                else:
+                    dp_map[i][j] = dp_map[i - 1][j] + dp_map[i][j - 1]
+                    
+        return dp_map[-1][-1]
+    
+    def minPathSum(self, grid):
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if i == 0 and j == 0:
+                    continue
+                elif i == 0:
+                    grid[i][j] = grid[i][j] + grid[i][j - 1]
+                elif j == 0:
+                    grid[i][j] = grid[i][j] + grid[i - 1][j]
+                else:
+                    grid[i][j] = min(grid[i][j] + grid[i - 1][j], 
+                                     grid[i][j] + grid[i][j - 1])
+        
+        return grid[-1][-1]
+                
             
     
             
