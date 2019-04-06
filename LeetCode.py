@@ -1321,6 +1321,8 @@ class Solution:
         # Use divide and conquer
         # First: locate which row
         # Second: see which col match the target
+        if len(matrix) == 0 or len(matrix[0]) == 0:
+            return False
         if target > matrix[-1][-1]: return False
         if target < matrix[0][0]: return False
         
@@ -1331,7 +1333,7 @@ class Solution:
             if matrix[mid][-1] == target:
                 return mid
             if matrix[mid][-1] > target:
-                if matrix[mid][0] < target:
+                if matrix[mid][0] <= target:
                     return mid
                 return searchRow(start, mid)
             if matrix[mid][-1] < target:
@@ -1350,13 +1352,134 @@ class Solution:
                 return searchCol(row_matrix, mid + 1, end)
 
         row = searchRow(0, len(matrix) - 1)
-        # print(row)
         if row == 0 and matrix[row][0] > target:
             return False
         if row == len(matrix) - 1 and matrix[row][-1] < target:
             return False
         
         return searchCol(matrix[row], 0, len(matrix[row]) - 1)
+    
+    def subsets(self, nums):
+        res = [[]]
+        for num in sorted(nums):
+            res += [item+[num] for item in res]
+        return res
+    
+    def exist(self, board, word):
+        visited = {}
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if self.getWords(board, word, i, j, visited):
+                    return True
+        
+        return False
+
+    def getWords(self, board, word, i, j, visited, pos = 0):
+        if pos == len(word):
+            return True
+
+        if i < 0 or i == len(board) or j < 0 or j == len(board[0]) or visited.get((i, j)) or word[pos] != board[i][j]:
+            return False
+
+        visited[(i, j)] = True
+        res = self.getWords(board, word, i, j + 1, visited, pos + 1) \
+                or self.getWords(board, word, i, j - 1, visited, pos + 1) \
+                or self.getWords(board, word, i + 1, j, visited, pos + 1) \
+                or self.getWords(board, word, i - 1, j, visited, pos + 1)
+        visited[(i, j)] = False
+
+        return res
+    
+    def search(self, nums, target):
+        # [4, 5, 6, 7, 8, 1, 2, 3]
+        # [7, 8, 1, 2, 3, 4, 5, 6]
+        # Take care of the duplicate components by increasing index or decreasing
+        # index
+        if len(nums) == 0:
+            return False
+        def get_smallest_index(start, end):
+            if nums[0] < nums[-1]:
+                return 0
+            
+            if start == end:
+                return start
+            mid = (start + end) // 2
+            
+            if nums[mid] < nums [mid - 1]:
+                return mid
+            if nums[mid] > nums[mid + 1]:
+                return mid + 1
+            
+            if nums[mid] < nums[start]: # it's on the left side
+                return get_smallest_index(start, mid)
+            else:
+                return get_smallest_index(mid + 1, end)
+                    
+        def helper(start, end):
+            if start == end:
+                return nums[start] == target
+            if nums[start] == nums[start + 1]:
+                return helper(start + 1, end)
+            if nums[end] == nums[end - 1]:
+                return helper(start, end - 1)
+            mid = (start + end) // 2
+            if nums[mid] == target:
+                return True
+            if nums[mid] > target:
+                return helper(start, mid)
+            else:
+                return helper(mid + 1, end)
+        
+        index = get_smallest_index(0, len(nums) - 1)
+        if nums[index] == target:
+            return True
+        if target < nums[index]:
+            return False
+        if nums[index] < target and nums[index:][-1] >= target:    # On the right side
+            return helper(index + 1, len(nums) - 1)
+        return helper(0, index)
+    
+    def partition(self, node, x):
+        # Decide the anchor point first, means all item at the left hand side 
+        # of this anchor point stay the same
+        # one you want to append it, just append it at the right hand side of 
+        # the anchor
+        if not node:
+            return node
+        self.anchor = node
+        self.head = node
+        
+        def decide_achor():
+            while(self.anchor.next):
+                if self.anchor.next.val >= x:
+                    break
+                else:
+                    self.anchor = self.anchor.next
+        
+        def insert(node):   # append the node after the anchor
+            tmp = node.next
+            node.next = tmp.next
+            tmp.next = self.anchor.next
+            self.anchor.next = tmp
+            # Move the anchor to the new appended node
+            self.anchor = self.anchor.next
+        
+        if self.anchor.val > x: # Append one more node to head
+            self.anchor = ListNode(x)
+            self.anchor.next = node
+        else:
+            decide_achor()
+            
+        node = self.anchor
+        while(node):
+            if not node.next:
+                break
+            if node.next.val < x:
+                insert(node)
+            node = node.next
+            
+        return self.head
                 
                 
            
