@@ -463,7 +463,7 @@ class Solution:
                 return True
 
             while(l >= 0 and maze[start[0]][l] == 0):    # left
-                l -=1
+                l -= 1
             if dfs(maze, [start[0], l + 1], destination, visited):
                 return True
 
@@ -1441,48 +1441,92 @@ class Solution:
         return helper(0, index)
     
     def partition(self, node, x):
-        # Decide the anchor point first, means all item at the left hand side 
-        # of this anchor point stay the same
-        # one you want to append it, just append it at the right hand side of 
-        # the anchor
         if not node:
             return node
-        self.anchor = node
-        self.head = node
+        before = before_list = ListNode(0)
+        after = after_list = ListNode(0)
         
-        def decide_achor():
-            while(self.anchor.next):
-                if self.anchor.next.val >= x:
-                    break
-                else:
-                    self.anchor = self.anchor.next
-        
-        def insert(node):   # append the node after the anchor
-            tmp = node.next
-            node.next = tmp.next
-            tmp.next = self.anchor.next
-            self.anchor.next = tmp
-            # Move the anchor to the new appended node
-            self.anchor = self.anchor.next
-        
-        if self.anchor.val > x: # Append one more node to head
-            self.anchor = ListNode(x)
-            self.anchor.next = node
-        else:
-            decide_achor()
-            
-        node = self.anchor
         while(node):
-            if not node.next:
-                break
-            if node.next.val < x:
-                insert(node)
+            if node.val < x:
+                before.next = node
+                before = before.next
+            else:
+                after.next = node
+                after = after.next
             node = node.next
-            
-        return self.head
+        
+        before.next = after_list.next
+        after.next = None
+        return before_list.next
+    
+    def merge_2_sorted_array(self, nums1, m, nums2, n):
+        # nums1 = [4, 5, 6, 0, 0, 0]
+        # nums2 = [1, 2, 3]
+        # Use 2 pointers
+        p1 = m - 1
+        p2 = n - 1
+        
+        p = len(nums1) - 1
+        while p1 >= 0 and p2 >= 0:
+            if nums2[p2] > nums1[p1]:
+                nums1[p] = nums2[p2]
+                p2 -= 1
+            else:
+                nums1[p] = nums1[p1]
+                p1 -= 1
+            p -= 1
+        
+        # Add the rest of the elements in nums2 to nums1
+        nums1[:p2 + 1] = nums2[:p2 + 1]
+        
+    def subsetsWithDup(self, nums):
+        nums.sort()
+        res = []
+        
+        # Depth First Search        
+        def dfs(nums, level, path, res):
+            res.append(path)
+            print(res)
+            for i in range(level, len(nums)):
+                if i > level and nums[i]==nums[i - 1]:
+                    continue
+                dfs(nums, i + 1, path+[nums[i]], res)
+        
+        dfs(nums, 0, [], res)
+        return res
+    
+    def numDecodings(self, s):
+        # Dynamic Programming
+        if not s:
+            return 0
+        dp = [0 for i in range(len(s) + 1)]
+        
+        dp[0] = 0
+        dp[1] = 0 if s[0] == '0' else 1
+        
+        for i in range(2, len(s) + 1):
+            if int(s[i]) > 0:
+                dp[i] += dp[i - 1]
+            if 10 <= int(s[i - 2:i]) <= 26:
+                dp[i] += dp[i - 2]
                 
-                
-           
+        return dp[len(s)]
+    
+    def inorderTraversal(self, root):
+        res = []
+        def helper(root):
+            if root:
+                # res.append(root.val)    # Pre order
+                if root.left:
+                    helper(root.left)
+                res.append(root.val)
+                if root.right:
+                    helper(root.right)
+                # res.append(root.val)    # post order
+                    
+        helper(root)
+        return res
+    
 class MyQueue:
     def __init__(self):
         self.s1 = []
@@ -1515,7 +1559,17 @@ class DLinkedNode():
 
 
 class LRUCache:
+    def __init__(self, capacity):
+        self.cache = {}
+        self.capacity = capacity
+        self.size = 0
+        self.head = DLinkedNode()
+        self.tail = DLinkedNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        
     def _add_node(self, node):
+        # Add node to head
         node.prev = self.head
         node.next = self.head.next
 
@@ -1537,15 +1591,6 @@ class LRUCache:
         last = self.tail.prev
         self._remove_node(last)
         return last
-
-    def __init__(self, capacity):
-        self.cache = {}
-        self.capacity = capacity
-        self.size = 0
-        self.head = DLinkedNode()
-        self.tail = DLinkedNode()
-        self.head.next = self.tail
-        self.tail.prev = self.head
 
     def get(self, key):
         node = self.cache.get(key)
