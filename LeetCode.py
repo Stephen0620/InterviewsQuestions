@@ -1527,6 +1527,27 @@ class Solution:
         helper(root)
         return res
     
+    def getPermutation(self, n, k):
+        self.number = [i for i in range(1, n + 1)]
+        self.ans = []
+        def helper(level):
+            if level == n:
+                self.ans.append(self.number[:])
+                return
+            for i in range(level, len(self.number)):
+                self.number[i], self.number[level] = self.number[level], self.number[i]
+                helper(level + 1)
+                if len(self.ans) == k:
+                    return
+                self.number[i], self.number[level] = self.number[level], self.number[i]
+
+        helper(0)
+        result = ''
+        for ele in self.ans[-1]:
+            result += str(ele)
+        return result
+                
+    
 class MyQueue:
     def __init__(self):
         self.s1 = []
