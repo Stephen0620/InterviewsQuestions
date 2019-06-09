@@ -26,13 +26,13 @@ class Solution:
         curL1 = l1
         curL2 = l2
         carry = 0
-        totalNode = []
+        totalNode = []  # you can just use a dummy head
         count = 0
         while(curL1 or curL2):
-            if (not curL1):
+            if not curL1:
                 total = curL2.val + carry
                 curL2 = curL2.next
-            elif (not curL2):
+            elif not curL2:
                 total = curL1.val + carry
                 curL1 = curL1.next
             else:
